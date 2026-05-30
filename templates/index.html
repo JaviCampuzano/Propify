@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Propify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div>
+                <img class="sidebar-logo" src="/brand/propify.png" alt="Propify">
+                <p class="eyebrow">Propify</p>
+                <h1>Recibos y alquileres sin hojas sueltas.</h1>
+                <p class="lede">Una base web para controlar propiedades, rentas y gastos mensuales desde el navegador.</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard">Dashboard</a>
+                <a href="#analitica">Analitica</a>
+                <a href="#propiedades">Propiedades</a>
+                <a href="#gastos">Gastos</a>
+                <a href="#propietario">Propietario</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-card">
+                    <span class="sidebar-label">Mes activo</span>
+                    <strong>{{ state.metrics.current_month }}</strong>
+                </div>
+                <p class="sidebar-maker">Made by Campuzano Solutions</p>
+            </div>
+        </aside>
+
+        <main class="content">
+            <section id="dashboard" class="hero">
+                <div>
+                    <p class="eyebrow">Panel principal</p>
+                    <h2>Controla el negocio del alquiler en un solo vistazo.</h2>
+                    <p>Ingresos, gastos, pagos pendientes y detalle de propiedades en una interfaz sencilla de mantener.</p>
+                </div>
+            </section>
+
+            <section class="metrics-grid" id="metrics-grid">
+                <article class="metric-card">
+                    <span>Ingresos mensuales</span>
+                    <strong>{{ "%.2f"|format(state.metrics.total_income) }} €</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Hipotecas</span>
+                    <strong>{{ "%.2f"|format(state.metrics.mortgage_total) }} €</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Gastos del mes</span>
+                    <strong>{{ "%.2f"|format(state.metrics.current_expenses) }} €</strong>
+                </article>
+                <article class="metric-card accent">
+                    <span>Beneficio estimado</span>
+                    <strong>{{ "%.2f"|format(state.metrics.estimated_profit) }} €</strong>
+                </article>
+            </section>
+
+            <section class="panel" id="analitica">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Analitica</p>
+                        <h3>Gastos, beneficios y tendencias</h3>
+                    </div>
+                </div>
+                <div class="analytics-grid">
+                    <section class="analytics-card">
+                        <p class="eyebrow">Tendencia 6 meses</p>
+                        <div id="trend-chart" class="trend-chart"></div>
+                    </section>
+                    <section class="analytics-card">
+                        <p class="eyebrow">Indicadores</p>
+                        <div id="trend-summary" class="trend-summary"></div>
+                    </section>
+                    <section class="analytics-card">
+                        <p class="eyebrow">Gastos por categoria</p>
+                        <div id="expense-breakdown" class="breakdown-list"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="panel" id="propiedades">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Inventario</p>
+                        <h3>Propiedades</h3>
+                    </div>
+                    <button class="button primary" type="button" data-open-modal="property-modal">Nueva propiedad</button>
+                </div>
+                <div id="properties-grid" class="properties-grid"></div>
+            </section>
+
+            <section class="two-column">
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Tesoreria</p>
+                            <h3>Registrar gasto</h3>
+                        </div>
+                    </div>
+                    <form id="expense-form" class="stack-form">
+                        <input id="expense-id" name="id" type="hidden">
+                        <div class="form-row">
+                            <label for="expense-description">Descripcion</label>
+                            <input id="expense-description" name="description" placeholder="Seguro, reparacion, suministros..." required>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-row">
+                                <label for="expense-amount">Importe</label>
+                                <input id="expense-amount" name="amount" type="number" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="expense-category">Categoria</label>
+                                <select id="expense-category" name="category">
+                                    <option value="OTHER">Otros</option>
+                                    <option value="REPAIR">Reparacion</option>
+                                    <option value="UTILITY">Suministros</option>
+                                    <option value="MORTGAGE">Hipoteca</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="expense-date">Fecha</label>
+                                <input id="expense-date" name="date" type="date">
+                            </div>
+                            <div class="form-row">
+                                <label for="expense-property">Propiedad</label>
+                                <select id="expense-property" name="property_id">
+                                    <option value="">Sin asociar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button id="expense-submit" class="button primary" type="submit">Guardar gasto</button>
+                            <button id="expense-cancel" class="icon-button" type="button" hidden>Cancelar edicion</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Cobros extra</p>
+                            <h3>Registrar ingreso</h3>
+                        </div>
+                    </div>
+                    <form id="income-form" class="stack-form">
+                        <input id="income-id" name="id" type="hidden">
+                        <div class="form-row">
+                            <label for="income-description">Descripcion</label>
+                            <input id="income-description" name="description" placeholder="Fianza, ayuda, trastero, garaje..." required>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-row">
+                                <label for="income-amount">Importe</label>
+                                <input id="income-amount" name="amount" type="number" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="income-category">Categoria</label>
+                                <select id="income-category" name="category">
+                                    <option value="OTHER">Otros</option>
+                                    <option value="DEPOSIT">Fianza</option>
+                                    <option value="BONUS">Extra</option>
+                                    <option value="PARKING">Garaje</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="income-date">Fecha</label>
+                                <input id="income-date" name="date" type="date">
+                            </div>
+                            <div class="form-row">
+                                <label for="income-property">Propiedad</label>
+                                <select id="income-property" name="property_id">
+                                    <option value="">Sin asociar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button id="income-submit" class="button secondary" type="submit">Guardar ingreso</button>
+                            <button id="income-cancel" class="icon-button" type="button" hidden>Cancelar edicion</button>
+                        </div>
+                    </form>
+                </section>
+            </section>
+
+            <section class="two-column">
+                <section class="panel" id="gastos">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Historial completo</p>
+                            <h3>Todos los gastos</h3>
+                        </div>
+                    </div>
+                    <div id="expenses-list" class="expenses-list"></div>
+                </section>
+
+                <section class="panel" id="ingresos">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Historial completo</p>
+                            <h3>Todos los ingresos</h3>
+                        </div>
+                    </div>
+                    <div id="incomes-list" class="expenses-list"></div>
+                </section>
+            </section>
+
+            <section class="panel" id="propietario">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">Configuracion</p>
+                        <h3>Propietario</h3>
+                    </div>
+                </div>
+                <form id="user-form" class="form-grid user-grid">
+                    <div class="form-row">
+                        <label for="user-name">Nombre</label>
+                        <input id="user-name" name="name" value="{{ state.user.name if state.user else '' }}" required>
+                    </div>
+                    <div class="form-row">
+                        <label for="user-client-code">Codigo cliente</label>
+                        <input id="user-client-code" name="client_code" value="{{ state.user.client_code if state.user else '' }}">
+                    </div>
+                    <div class="form-row">
+                        <label for="user-password">Contrasena</label>
+                        <input id="user-password" name="password" type="password" value="{{ state.user.password if state.user else '' }}" required>
+                    </div>
+                    <div class="form-actions">
+                        <button class="button secondary" type="submit">Guardar propietario</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <dialog id="property-modal" class="modal">
+        <form id="property-form" class="stack-form modal-form">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">Propiedad</p>
+                    <h3 id="property-modal-title">Nueva propiedad</h3>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="property-modal">Cerrar</button>
+            </div>
+            <input id="property-id" name="id" type="hidden">
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="property-address">Direccion</label>
+                    <input id="property-address" name="address" required>
+                </div>
+                <div class="form-row">
+                    <label for="property-city">Ciudad</label>
+                    <input id="property-city" name="city">
+                </div>
+                <div class="form-row">
+                    <label for="property-zip">Codigo postal</label>
+                    <input id="property-zip" name="zip_code">
+                </div>
+                <div class="form-row">
+                    <label for="property-country">Pais</label>
+                    <input id="property-country" name="country" value="España">
+                </div>
+                <div class="form-row">
+                    <label for="property-cadastral">Referencia catastral</label>
+                    <input id="property-cadastral" name="cadastral_ref">
+                </div>
+                <div class="form-row">
+                    <label for="property-mortgage">Hipoteca mensual</label>
+                    <input id="property-mortgage" name="mortgage_monthly" type="number" min="0" step="0.01" value="0">
+                </div>
+            </div>
+            <label class="checkbox-row">
+                <input id="property-utilities" name="utilities_included" type="checkbox">
+                <span>Restar suministros incluidos del beneficio estimado</span>
+            </label>
+            <button class="button primary" type="submit">Guardar propiedad</button>
+        </form>
+    </dialog>
+
+    <dialog id="tenant-modal" class="modal">
+        <form id="tenant-form" class="stack-form modal-form">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">Inquilino</p>
+                    <h3 id="tenant-modal-title">Nuevo inquilino</h3>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="tenant-modal">Cerrar</button>
+            </div>
+            <input id="tenant-property-id" name="property_id" type="hidden">
+            <input id="tenant-id" name="tenant_id" type="hidden">
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="tenant-name">Nombre</label>
+                    <input id="tenant-name" name="name" required>
+                </div>
+                <div class="form-row">
+                    <label for="tenant-rent">Renta mensual</label>
+                    <input id="tenant-rent" name="rent" type="number" min="0" step="0.01" required>
+                </div>
+                <div class="form-row">
+                    <label for="tenant-start-date">Fecha de inicio</label>
+                    <input id="tenant-start-date" name="start_date" type="date">
+                </div>
+                <div class="form-row">
+                    <label for="tenant-deposit-amount">Importe fianza</label>
+                    <input id="tenant-deposit-amount" name="deposit_amount" type="number" min="0" step="0.01" value="0">
+                </div>
+                <div class="form-row">
+                    <label for="tenant-deposit-payment-date">Fecha cobro fianza</label>
+                    <input id="tenant-deposit-payment-date" name="deposit_payment_date" type="date">
+                </div>
+            </div>
+            <label class="checkbox-row">
+                <input id="tenant-deposit-paid" name="deposit_paid" type="checkbox">
+                <span>Fianza cobrada</span>
+            </label>
+            <section class="payment-editor">
+                <div>
+                    <p class="eyebrow">Mensualidades</p>
+                    <p class="muted payment-copy">Si la fecha de inicio es anterior al mes actual, revisa el estado de cada mensualidad.</p>
+                </div>
+                <div id="tenant-payments-editor" class="payment-grid"></div>
+            </section>
+            <button class="button primary" type="submit">Guardar inquilino</button>
+        </form>
+    </dialog>
+
+    <div id="toast" class="toast" hidden></div>
+    <script>
+        window.__APP_STATE__ = {{ state_json|safe }};
+    </script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

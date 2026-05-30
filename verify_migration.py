@@ -1,19 +1,26 @@
-from gestor_alquiler import DataManager
-import json
+import os
+
+from data_manager import DataManager
+
+
+TEST_FILE = "test_migration_v2.json"
+
 
 def verify_migration():
-    dm = DataManager()
-    dm.load_data()
-    print("Data loaded.")
-    
-    with open("datos.json", "r") as f:
-        data = json.load(f)
-        print(f"File content: {json.dumps(data, indent=2)}")
+    if os.path.exists(TEST_FILE):
+        os.remove(TEST_FILE)
 
-    if isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict):
-        print("Migration SUCCESS: Data is a list of objects.")
+    dm = DataManager(TEST_FILE)
+    dm.load_data()
+
+    if dm.properties:
+        print(f"[PASS] Migration loaded {len(dm.properties)} properties from legacy data.")
     else:
-        print("Migration FAILED or NO DATA.")
+        print("[FAIL] Migration did not load any property.")
+
+    if os.path.exists(TEST_FILE):
+        os.remove(TEST_FILE)
+
 
 if __name__ == "__main__":
     verify_migration()

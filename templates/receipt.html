@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recibo {{ receipt.reference }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/receipt.css">
+</head>
+<body>
+    <main class="receipt-shell">
+        <section class="receipt-page">
+            <aside class="receipt-rail">
+                <img class="receipt-logo" src="/brand/propify.png" alt="Propify">
+                <p class="eyebrow">Propify</p>
+                <h1>Recibo de alquiler</h1>
+                <p class="lede">Documento emitido con la misma identidad visual de la aplicacion para presentar el cobro mensual con una imagen mucho mas cuidada.</p>
+
+                <div class="rail-stack">
+                    <article class="rail-card">
+                        <span>Periodo</span>
+                        <strong>{{ receipt.period_label }}</strong>
+                    </article>
+                    <article class="rail-card">
+                        <span>Estado</span>
+                        <strong>{{ receipt.status_label }}</strong>
+                    </article>
+                    <article class="rail-card total">
+                        <span>Importe</span>
+                        <strong>{{ receipt.amount_label }}</strong>
+                    </article>
+                </div>
+            </aside>
+
+            <section class="receipt-body">
+                <header class="receipt-header">
+                    <div>
+                        <p class="eyebrow">Referencia</p>
+                        <strong>{{ receipt.reference }}</strong>
+                    </div>
+                    <div>
+                        <p class="eyebrow">Fecha de emision</p>
+                        <strong>{{ receipt.issue_date }}</strong>
+                    </div>
+                    <div>
+                        <p class="eyebrow">Situacion</p>
+                        <span class="status-chip {{ receipt.status_class }}">{{ receipt.status_label }}</span>
+                    </div>
+                </header>
+
+                <section class="hero-card">
+                    <div class="hero-copy">
+                        <p class="eyebrow">Resumen del mes</p>
+                        <h2>{{ receipt.amount_label }}</h2>
+                        <p>{{ receipt.concept }}</p>
+                    </div>
+                    <div class="hero-mark">
+                        <span>Mes</span>
+                        <strong>{{ receipt.period_label }}</strong>
+                    </div>
+                </section>
+
+                <section class="grid-two">
+                    <article class="info-card">
+                        <p class="eyebrow">Inquilino</p>
+                        <h3>{{ receipt.tenant.name }}</h3>
+                        <ul>
+                            <li>Inicio de contrato: {{ receipt.tenant.start_date }}</li>
+                            <li>Fianza: {{ receipt.tenant.deposit_amount }}</li>
+                            <li>Estado de fianza: {{ "Cobrada" if receipt.tenant.deposit_paid else "Pendiente" }}</li>
+                        </ul>
+                    </article>
+
+                    <article class="info-card">
+                        <p class="eyebrow">Propiedad</p>
+                        <h3>{{ receipt.property.address }}</h3>
+                        <ul>
+                            <li>{{ receipt.property.location }}</li>
+                            <li>Referencia catastral: {{ receipt.property.cadastral_ref }}</li>
+                            <li>Periodo liquidado: {{ receipt.period_label }}</li>
+                        </ul>
+                    </article>
+                </section>
+
+                <section class="detail-card">
+                    <div class="detail-heading">
+                        <div>
+                            <p class="eyebrow">Detalle</p>
+                            <h3>Desglose del recibo</h3>
+                        </div>
+                        <strong>{{ receipt.amount_label }}</strong>
+                    </div>
+
+                    <div class="detail-table">
+                        <div class="detail-head">Concepto</div>
+                        <div class="detail-head">Periodo</div>
+                        <div class="detail-head">Estado</div>
+                        <div class="detail-head align-right">Importe</div>
+
+                        <div class="detail-cell strong">Renta mensual de vivienda</div>
+                        <div class="detail-cell">{{ receipt.period_label }}</div>
+                        <div class="detail-cell">
+                            <span class="status-chip {{ receipt.status_class }}">{{ receipt.status_label }}</span>
+                        </div>
+                        <div class="detail-cell strong align-right">{{ receipt.amount_label }}</div>
+                    </div>
+                </section>
+
+                <section class="footer-grid">
+                    <article class="note-card">
+                        <p class="eyebrow">Observaciones</p>
+                        <p>{{ receipt.notes }}</p>
+                    </article>
+
+                    <article class="signature-card">
+                        <p class="eyebrow">Emitido por</p>
+                        <strong>{{ receipt.owner.name if receipt.owner else "Propietario sin configurar" }}</strong>
+                        <p>{{ receipt.owner.client_code if receipt.owner and receipt.owner.client_code else "Sin codigo de cliente" }}</p>
+                        <div class="signature-line"></div>
+                        <p class="maker-note">made by Campuzano Solutions</p>
+                    </article>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <button class="print-button" type="button" onclick="window.print()">Imprimir o guardar en PDF</button>
+</body>
+</html>

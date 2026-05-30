@@ -12,7 +12,7 @@
             "city": "",
             "zip_code": "",
             "cadastral_ref": "",
-            "utilities_included": false,
+            "utilities_included": true,
             "tenants": [
                 {
                     "id": "dc4f5396-bf57-4550-a8ba-d6d7bbb4fbbe",
@@ -235,6 +235,14 @@
         }
     ],
     "incomes": [
+        {
+            "id": "e5b0fce7-8291-44ea-9c2a-fcef7c9a8cef",
+            "amount": 500.0,
+            "category": "DEPOSIT",
+            "description": "FIANZA LAURA FERNANDEZ MELLADO",
+            "date": "2026-01-01",
+            "property_id": "07ae6193-a43b-4972-8e86-1f9ba120af54"
+        },
         {
             "id": "b2320cb0-6724-4e23-8bcc-0cc3290230ca",
             "amount": 99.91,

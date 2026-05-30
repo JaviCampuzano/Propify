@@ -12,7 +12,7 @@
             "city": "",
             "zip_code": "",
             "cadastral_ref": "",
-            "utilities_included": false,
+            "utilities_included": true,
             "tenants": [
                 {
                     "id": "dc4f5396-bf57-4550-a8ba-d6d7bbb4fbbe",

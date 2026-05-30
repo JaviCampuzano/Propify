@@ -1,0 +1,437 @@
+:root {
+    --bg: #efe6da;
+    --paper: #fffaf2;
+    --paper-strong: #f4efe7;
+    --ink: #1d2b36;
+    --muted: #69737d;
+    --line: rgba(29, 43, 54, 0.12);
+    --accent: #c45c2f;
+    --accent-strong: #8a3511;
+    --accent-soft: #f2d7c7;
+    --olive: #556b2f;
+    --olive-soft: rgba(85, 107, 47, 0.14);
+    --shadow: 0 32px 80px rgba(50, 39, 29, 0.18);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family: "Source Sans 3", Georgia, "Times New Roman", serif;
+    background:
+        radial-gradient(circle at top left, rgba(196, 92, 47, 0.18), transparent 28%),
+        linear-gradient(180deg, #f6f1e7 0%, #e9dece 100%);
+}
+
+.receipt-shell {
+    width: min(1180px, calc(100% - 48px));
+    margin: 32px auto 120px;
+}
+
+.receipt-page {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    background: var(--paper);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.receipt-rail {
+    padding: 40px 28px;
+    background:
+        linear-gradient(180deg, rgba(29, 43, 54, 0.98) 0%, rgba(29, 43, 54, 0.92) 100%);
+    color: #f7f0e5;
+    position: relative;
+}
+
+.receipt-logo {
+    display: block;
+    width: 110px;
+    height: auto;
+    margin: 0 0 22px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+}
+
+.receipt-rail::after {
+    content: "";
+    position: absolute;
+    right: -60px;
+    bottom: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 92, 47, 0.38), transparent 68%);
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    color: inherit;
+    opacity: 0.72;
+}
+
+.receipt-rail h1,
+.hero-copy h2,
+.info-card h3,
+.detail-heading h3 {
+    margin: 0;
+    font-family: "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.receipt-rail h1 {
+    font-size: clamp(3rem, 6vw, 4.6rem);
+    line-height: 0.9;
+    max-width: 6ch;
+}
+
+.lede {
+    max-width: 28ch;
+    margin: 18px 0 0;
+    line-height: 1.55;
+    color: rgba(247, 240, 229, 0.78);
+}
+
+.rail-stack {
+    margin-top: 40px;
+    display: grid;
+    gap: 14px;
+}
+
+.rail-card {
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.rail-card span {
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    color: rgba(247, 240, 229, 0.72);
+}
+
+.rail-card strong {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.rail-card.total {
+    background: linear-gradient(135deg, rgba(196, 92, 47, 0.82), rgba(138, 53, 17, 0.94));
+    border-color: transparent;
+}
+
+.rail-card.total strong {
+    font-size: 1.85rem;
+}
+
+.receipt-body {
+    padding: 34px;
+    background:
+        radial-gradient(circle at right top, rgba(242, 215, 199, 0.46), transparent 22%),
+        radial-gradient(circle at left bottom, rgba(85, 107, 47, 0.08), transparent 24%),
+        var(--paper);
+}
+
+.receipt-header,
+.grid-two,
+.footer-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.receipt-header {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+}
+
+.receipt-header strong {
+    font-size: 1.02rem;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.86rem;
+}
+
+.status-chip.success {
+    background: var(--olive-soft);
+    color: var(--olive);
+}
+
+.status-chip.warning {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+}
+
+.hero-card,
+.info-card,
+.detail-card,
+.note-card,
+.signature-card {
+    border-radius: 28px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.hero-card {
+    margin-top: 26px;
+    padding: 28px 30px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 20px;
+    background:
+        linear-gradient(135deg, rgba(29, 43, 54, 0.98), rgba(42, 60, 73, 0.96));
+    color: #fff5ed;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -44px auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 92, 47, 0.36), transparent 70%);
+}
+
+.hero-copy p:last-child {
+    margin: 12px 0 0;
+    color: rgba(255, 245, 237, 0.8);
+}
+
+.hero-copy h2 {
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 0.9;
+}
+
+.hero-mark {
+    position: relative;
+    z-index: 1;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    align-self: center;
+}
+
+.hero-mark span {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: rgba(255, 245, 237, 0.68);
+}
+
+.hero-mark strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.35rem;
+}
+
+.grid-two {
+    margin-top: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.info-card,
+.detail-card,
+.note-card,
+.signature-card {
+    padding: 22px 24px;
+    backdrop-filter: blur(10px);
+}
+
+.info-card h3,
+.detail-heading h3 {
+    font-size: 2rem;
+    line-height: 0.95;
+}
+
+.info-card ul {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    color: var(--muted);
+}
+
+.detail-card {
+    margin-top: 22px;
+}
+
+.detail-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.detail-heading strong {
+    font-size: 1.35rem;
+    color: var(--accent-strong);
+}
+
+.detail-table {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.2fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.detail-head,
+.detail-cell {
+    padding: 16px 18px;
+    background: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid var(--line);
+}
+
+.detail-head {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    background: var(--paper-strong);
+}
+
+.detail-cell {
+    display: flex;
+    align-items: center;
+}
+
+.detail-cell.strong {
+    font-weight: 700;
+}
+
+.align-right {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.footer-grid {
+    margin-top: 22px;
+    grid-template-columns: 1.45fr 1fr;
+}
+
+.note-card p:last-child,
+.signature-card p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.signature-card strong {
+    display: block;
+    font-size: 1.2rem;
+}
+
+.signature-line {
+    margin-top: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(29, 43, 54, 0.3) 16%, rgba(29, 43, 54, 0.3) 84%, transparent 100%);
+}
+
+.maker-note {
+    margin-top: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: var(--accent-strong);
+}
+
+.print-button {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: #fff7f0;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 18px 34px rgba(138, 53, 17, 0.26);
+}
+
+@media (max-width: 980px) {
+    .receipt-shell {
+        width: min(100%, calc(100% - 24px));
+        margin: 12px auto 96px;
+    }
+
+    .receipt-page,
+    .receipt-header,
+    .grid-two,
+    .footer-grid,
+    .hero-card {
+        grid-template-columns: 1fr;
+    }
+
+    .receipt-body {
+        padding: 22px;
+    }
+
+    .detail-table {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-head {
+        display: none;
+    }
+
+    .detail-cell {
+        border-bottom: 1px solid var(--line);
+    }
+
+    .align-right {
+        justify-content: flex-start;
+        text-align: left;
+    }
+}
+
+@media print {
+    body {
+        background: #fff;
+    }
+
+    .receipt-shell {
+        width: 100%;
+        margin: 0;
+    }
+
+    .receipt-page {
+        box-shadow: none;
+        border-radius: 0;
+        border: 0;
+        min-height: 100vh;
+    }
+
+    .print-button {
+        display: none;
+    }
+}
